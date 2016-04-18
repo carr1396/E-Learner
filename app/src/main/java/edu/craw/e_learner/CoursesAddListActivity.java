@@ -6,21 +6,21 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBar;
-import android.view.MenuItem;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
@@ -53,9 +53,9 @@ import edu.craw.e_learner.gui.Toaster;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class CourseListActivity extends AppCompatActivity {
+public class CoursesAddListActivity extends AppCompatActivity {
 
-    private static final String TAG = "CoursesListActivityLOGS";
+    private static final String TAG = "CoursesAddActivityLOGS";
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
@@ -78,7 +78,7 @@ public class CourseListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_list);
 
-        learnerApp = (LearnerApplication) CourseListActivity.this.getApplicationContext();
+        learnerApp = (LearnerApplication) CoursesAddListActivity.this.getApplicationContext();
 
         courseGetUrl = learnerApp.getBase_server_url() + learnerApp.getBase_api_endpoint() + "/courses/mine";
 
@@ -109,7 +109,8 @@ public class CourseListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CourseListActivity.this.startActivity(new Intent(CourseListActivity.this, CoursesAddListActivity.class));
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
         });
         // Show the Up button in the action bar.
@@ -119,9 +120,9 @@ public class CourseListActivity extends AppCompatActivity {
         }
 
         vs = (ViewSwitcher) findViewById(R.id.list_view_switcher);
-        slide_in_left = AnimationUtils.loadAnimation(CourseListActivity.this,
+        slide_in_left = AnimationUtils.loadAnimation(CoursesAddListActivity.this,
                 android.R.anim.slide_in_left);
-        slide_out_right = AnimationUtils.loadAnimation(CourseListActivity.this,
+        slide_out_right = AnimationUtils.loadAnimation(CoursesAddListActivity.this,
                 android.R.anim.slide_out_right);
 
         vs.setInAnimation(slide_in_left);
@@ -173,7 +174,7 @@ public class CourseListActivity extends AppCompatActivity {
                         Log.d(TAG, response.toString());
                         ITEMS.clear();
                         int responseLength = response.length();
-                        Toast.makeText(CourseListActivity.this, "Network Course Fetch Successful. You Have " + responseLength+ " Course(s)", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CoursesAddListActivity.this, "Network Course Fetch Successful. You Have " + responseLength+ " Course(s)", Toast.LENGTH_SHORT).show();
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject courseJSON = response.getJSONObject(i);
@@ -223,21 +224,21 @@ public class CourseListActivity extends AppCompatActivity {
 
                                 if (responseBody != null) {
                                     JSONObject jsonObject = new JSONObject(responseBody);
-                                    Toaster.makeText(CourseListActivity.this, responseBody, Toast.LENGTH_LONG).show();
+                                    Toaster.makeText(CoursesAddListActivity.this, responseBody, Toast.LENGTH_LONG).show();
                                 }else{
-                                    Toast.makeText(CourseListActivity.this, "Something Went Wrong While Parsing Network Data, Try Again Later", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(CoursesAddListActivity.this, "Something Went Wrong While Parsing Network Data, Try Again Later", Toast.LENGTH_LONG).show();
                                 }
 
                             } else {
-                                Toast.makeText(CourseListActivity.this, "Server Connection Error. Check Internet Connection Or Try Again Later", Toast.LENGTH_LONG).show();
+                                Toast.makeText(CoursesAddListActivity.this, "Server Connection Error. Check Internet Connection Or Try Again Later", Toast.LENGTH_LONG).show();
 
                             }
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
-                            Toast.makeText(CourseListActivity.this, "Error!! Something Went Wrong", Toast.LENGTH_LONG).show();
+                            Toast.makeText(CoursesAddListActivity.this, "Error!! Something Went Wrong", Toast.LENGTH_LONG).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(CourseListActivity.this, "Error!! Something Went Wrong", Toast.LENGTH_LONG).show();
+                            Toast.makeText(CoursesAddListActivity.this, "Error!! Something Went Wrong", Toast.LENGTH_LONG).show();
                         }
                     }
                 }) {
@@ -308,14 +309,13 @@ public class CourseListActivity extends AppCompatActivity {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
                         arguments.putString(CourseDetailFragment.ARG_ITEM_ID, holder.mItem.getId() + "");
-                        CourseDetailFragment fragment = new CourseDetailFragment();
-                        fragment.setArguments(arguments);
+                        CourseDetailFragment fragment = new CourseDetailFragment();                        fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.course_detail_container, fragment)
                                 .commit();
                     } else {
                         Context context = v.getContext();
-                        Intent intent = new Intent(context, CourseDetailActivity.class);
+                        Intent intent = new Intent(context, CourseAddDetailActivity.class);
                         intent.putExtra(CourseDetailFragment.ARG_ITEM_ID, (int) (holder.mItem.getId()));
 
                         context.startActivity(intent);
@@ -323,6 +323,7 @@ public class CourseListActivity extends AppCompatActivity {
                 }
             });
         }
+
 
         @Override
         public int getItemCount() {

@@ -34,18 +34,48 @@
             android:label="@string/title_course_list"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.craw.e_learner.MainActivity" />
+        </activity>
+        <activity
+            android:name=".CoursesAddListActivity"
+            android:label="@string/title_course_list"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
+
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.craw.e_learner.MainActivity" />
         </activity>
         <activity
             android:name=".CourseDetailActivity"
-            android:label="@string/title_course_detail"
+            android:label="@string/title_course_add_list"
             android:parentActivityName=".CourseListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.craw.e_learner.CourseListActivity" />
+        </activity>
+        <activity
+            android:name=".CourseAddDetailActivity"
+            android:label="@string/title_course_detail"
+            android:parentActivityName=".CourseListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.craw.e_learner.CoursesAddListActivity" />
         </activity>
     </application>
 

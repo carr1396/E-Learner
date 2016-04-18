@@ -13,6 +13,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.IUs
     private String token;
     private LoginFragment loginFragment;
     private MainFragment mainFragment;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.IUs
         learnerApp = (LearnerApplication) getApplicationContext();
         Typeface tf = learnerApp.getTf();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        sharedPref =  MainActivity.this.getPreferences(Context.MODE_PRIVATE);
+        sharedPref =  learnerApp.getSettings();
         username = sharedPref.getString("username", "");
         token = sharedPref.getString("_token", "");
         toolbar.setTitle("");
@@ -69,15 +71,16 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.IUs
         }
         setSupportActionBar(toolbar);
 
-
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MainActivity.this.startActivity(new Intent(MainActivity.this, CourseListActivity.class));
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
+                if (learnerApp.isApplicationIsAuthenticated()){
+                    MainActivity.this.startActivity(new Intent(MainActivity.this, CourseListActivity.class));
+                }else{
+                    Snackbar.make(view, "You Are Not Logged In, Do So To See Your Courses", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
             }
         });
 
@@ -159,6 +162,8 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.IUs
     public void onUserLoggedIn(boolean isLoggedIn ) {
         username = sharedPref.getString("username", "");
         token = sharedPref.getString("_token", "");
+        learnerApp.setAutheticationToken(token);
+//        Log.d(TAG, token);
         Toaster.makeText(MainActivity.this, "You Are Logged In as, "+username, Toast.LENGTH_LONG).show();
         if (mainFragment==null)
         {

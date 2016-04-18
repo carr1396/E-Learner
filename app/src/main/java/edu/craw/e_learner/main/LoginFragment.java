@@ -93,7 +93,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         learnerApp = (LearnerApplication) getActivity().getApplicationContext();
         baseURL = learnerApp.getBase_server_url();
-        sharedPref =  LoginFragment.this.getActivity().getPreferences(Context.MODE_PRIVATE);
+        sharedPref =  learnerApp.getSettings();
         tf = learnerApp.getTf();
         if (getArguments() != null) {
             mUsername = getArguments().getString(ARG_USERNAME);

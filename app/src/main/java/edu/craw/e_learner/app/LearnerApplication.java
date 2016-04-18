@@ -1,8 +1,10 @@
 package edu.craw.e_learner.app;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -24,7 +26,12 @@ public class LearnerApplication extends Application {
     private static LearnerApplication singleton;
     private RequestQueue queue;
     private Typeface tf;
+    private SharedPreferences settings;
     private static final String FONT_PATH="fonts/anonymous_pro.ttf";
+
+    private String base_api_endpoint="/api/v1";
+
+    private String autheticationToken="";
 
     public String getBase_server_url() {
         return base_server_url;
@@ -34,7 +41,7 @@ public class LearnerApplication extends Application {
         this.base_server_url = base_server_url;
     }
 
-    private String base_server_url = "http://192.168.43.128:8080";
+    private String base_server_url = "http://192.168.10.100:8080";
 
     public LeanerDBSQLiteHelper getDbHelper() {
         return dbHelper;
@@ -50,6 +57,7 @@ public class LearnerApplication extends Application {
     public void onCreate() {
         super.onCreate();
         singleton = this;
+        setSettings();
         LearnerApplication.this.tf = Typeface.createFromAsset(getApplicationContext().getAssets(), FONT_PATH);
         LearnerApplication.this.setQueue(Volley.newRequestQueue(this));;
         LearnerApplication.this.setDbHelper(new LeanerDBSQLiteHelper(LearnerApplication.this));
@@ -91,4 +99,36 @@ public class LearnerApplication extends Application {
     public void setTf(String fontPath) {
         this.tf = Typeface.createFromAsset(getApplicationContext().getAssets(), fontPath);
     }
+
+    public String getBase_api_endpoint() {
+        return base_api_endpoint;
+    }
+
+    public void setBase_api_endpoint(String base_api_endpoint) {
+        this.base_api_endpoint = base_api_endpoint;
+    }
+
+    public String getAutheticationToken() {
+        return autheticationToken;
+    }
+
+    public void setAutheticationToken(String autheticationToken) {
+        this.autheticationToken = autheticationToken;
+    }
+
+    public SharedPreferences getSettings() {
+        return settings;
+    }
+
+    private void setSettings() {
+        this.settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+    }
+
+    public boolean isApplicationIsAuthenticated() {
+        return !settings.getString("_token", "").trim().isEmpty();
+    }
 }
+
+
+
+
